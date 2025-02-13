@@ -1,27 +1,53 @@
 package com.example.mkiosk
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.mkiosk.ui.theme.MkioskTheme
-import com.example.mkiosk.ui.theme.Typography
 import com.example.mkiosk.ui.theme.mainColorScheme
+import com.example.mkiosk.util.Util.editingSong
+import com.example.mkiosk.util.Util.songList
+import com.example.mkiosk.widget.AdminCard
 import com.example.mkiosk.widget.AppBar.CustomAppBar
+import com.example.mkiosk.widget.InputWindow.AdminLogin
+import com.example.mkiosk.widget.InputWindow.EditDialog
+import com.example.mkiosk.widget.InputWindow.SongDialog
+import com.example.mkiosk.widget.SongCard
+import com.example.mkiosk.widget.VerifySection
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
+
+var cameraExecutor: ExecutorService = Executors.newSingleThreadExecutor()
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge() // 앱의 화면에 status bar(상태표시줄)과 navigation bar (네비게이션바) 까지 포함한다. 상태표시줄과 네비게이션바는 앱의 내용을 가리지 않기 위해 투명해짐
@@ -30,29 +56,57 @@ class MainActivity : ComponentActivity() {
                 App()
             }
         }
+        cameraExecutor = Executors.newSingleThreadExecutor()
     }
-}
 
-@OptIn(ExperimentalMaterial3Api::class) // 실험적인 기능 사용
-@Composable
-fun App() {
+    override fun onDestroy() {
+        super.onDestroy()
+        cameraExecutor.shutdown()
+    }
 
-    Surface(modifier = Modifier.fillMaxSize().background(mainColorScheme.background)) {
-        Scaffold(modifier = Modifier.fillMaxSize(),
-            topBar = { CustomAppBar() }
-        ) { innerPadding -> // topBar와 bottomBar를 가리지 않음
-            Row(modifier = Modifier.padding(innerPadding)) {
-                
+    @OptIn(ExperimentalFoundationApi::class)
+    @Preview(showSystemUi = true, device = "id:pixel_tablet")
+    @Composable
+    fun App() {
+        var (id, idChanger) = rememberSaveable { mutableStateOf("") }
+        var (applyDialog, applyChanger) = remember { mutableStateOf(false) }
+        var (songs, songChanger) = remember { mutableStateOf(songList) }
+        var (editDialog, editChanger) = remember { mutableStateOf(false) }
+        var (admin, adminLogin) = rememberSaveable { mutableStateOf(false)}
+        var (adminDialog, adminChanger) = remember { mutableStateOf(false)}
+
+        Surface(modifier = Modifier.fillMaxSize().background(mainColorScheme.onPrimary)) {
+            Scaffold(modifier = Modifier.fillMaxSize(),
+                topBar = { CustomAppBar(id.isNotEmpty(), admin, adminLogin, adminChanger) }
+            ) { innerPadding -> // topBar와 bottomBar를 가리지 않음
+
+                if (applyDialog) SongDialog(id, applyChanger, songChanger)
+                if (editDialog) EditDialog(id, editChanger, editingSong, songChanger)
+                if (adminDialog) AdminLogin(adminLogin, adminChanger)
+
+                Row(modifier = Modifier.padding(innerPadding)) {
+                    VerifySection(id, idChanger, applyChanger, admin)
+
+                    VerticalDivider(
+                        modifier = Modifier.fillMaxHeight(),
+                        thickness = 5.dp,
+                        color = mainColorScheme.tertiary
+                    )
+
+                    LazyColumn(modifier=Modifier.fillMaxSize()) {
+                        itemsIndexed(items = songs, key = { _, song -> song.id}) { index, song ->
+                            if (admin) {
+                                AdminCard(index+1, song, songChanger, Modifier.animateItemPlacement())
+                            } else {
+                                SongCard(index+1, id, song, songChanger, editChanger, Modifier.animateItemPlacement())
+                            }
+                        }
+                    }
+                }
             }
         }
     }
 }
 
 
-@Preview(showSystemUi = true, device = "id:pixel_tablet")
-@Composable
-fun MainPreview() {
-    MkioskTheme {
-        App()
-    }
-}
+

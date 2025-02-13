@@ -20,7 +20,6 @@ val mainColorScheme = lightColorScheme(
     primary = Salesio,
     secondary = BlackGray,
     tertiary = Gray,
-    background = WhiteGray,
     onPrimary = White
 
     /* Other default colors to override

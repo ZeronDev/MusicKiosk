@@ -32,7 +32,7 @@ val Typography = Typography(
     ),
     bodyMedium = TextStyle(
         fontFamily = nanumGothic,
-        fontWeight = FontWeight.Normal,
+        fontWeight = FontWeight.Bold,
         fontSize = 30.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp
@@ -40,7 +40,7 @@ val Typography = Typography(
     bodySmall = TextStyle(
         fontFamily = nanumGothic,
         fontWeight = FontWeight.Normal,
-        fontSize = 20.sp,
+        fontSize = 25.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp
     ),
