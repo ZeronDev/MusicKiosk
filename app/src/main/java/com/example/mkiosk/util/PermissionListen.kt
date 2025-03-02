@@ -1,7 +1,6 @@
 package com.example.mkiosk.util
 
 import android.content.Context
-import android.widget.Toast
 import com.example.mkiosk.R
 import com.example.mkiosk.data.DataStorage.grant
 import com.example.mkiosk.util.Util.toast

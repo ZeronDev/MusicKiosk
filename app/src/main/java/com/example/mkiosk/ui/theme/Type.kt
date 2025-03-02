@@ -16,11 +16,11 @@ val nanumGothic = FontFamily(
 )
 
 val Typography = Typography(
-     titleLarge = TextStyle( //TopBar
+     titleLarge = TextStyle(
         fontFamily = nanumGothic,
         fontWeight = FontWeight.Bold,
-        fontSize = 40.sp, // 폰트크기 (sp : 안드로이드의 글자 크기 단위, dp와 똑같지만)
-        lineHeight = 24.sp, //
+        fontSize = 40.sp,
+        lineHeight = 24.sp,
         letterSpacing = 0.5.sp
     ),
     bodyLarge = TextStyle(
@@ -51,20 +51,4 @@ val Typography = Typography(
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp
     )
-/* Other default text styles to override
-    titleLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 22.sp,
-        lineHeight = 28.sp,
-        letterSpacing = 0.sp
-    ),
-    labelSmall = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Medium,
-        fontSize = 11.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.5.sp
-    )
-    */
 )

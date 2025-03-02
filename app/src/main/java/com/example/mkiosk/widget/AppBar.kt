@@ -20,16 +20,21 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.mkiosk.MainActivity
 import com.example.mkiosk.R
+import com.example.mkiosk.data.DataStorage.storeSongs
 import com.example.mkiosk.ui.theme.Typography
 import com.example.mkiosk.ui.theme.mainColorScheme
 import com.example.mkiosk.util.Changer
+import com.example.mkiosk.util.Util.accountMap
 import com.example.mkiosk.util.Util.toast
+import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.json.Json
 
 object AppBar {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun CustomAppBar(isLogined: Boolean, isAdmin: Boolean, adminChanger: Changer<Boolean>, dialogChanger: Changer<Boolean>) {
+    fun CustomAppBar(isLogined: Boolean, isAdmin: Boolean, adminChanger: Changer<Boolean>, dialogChanger: Changer<Boolean>, activity: MainActivity) {
         val context = LocalContext.current
         TopAppBar(
             title = { Row {
@@ -48,7 +53,13 @@ object AppBar {
                         adminChanger(false)
                     }
                 }) { Text(stringResource(if (isAdmin) R.string.admin_logout else R.string.admin_button)) }
-                IconButton(onClick = {}) {
+                IconButton(onClick = {
+                    Log.d("TEST", "test: ${Json.encodeToString(accountMap)}")
+                    if (isAdmin) {
+                        runBlocking { storeSongs(context) }
+                        activity.stopLockTask()
+                    }
+                }) {
                     Icon(
                         imageVector = Icons.Filled.Close,
                         tint = mainColorScheme.onPrimary,

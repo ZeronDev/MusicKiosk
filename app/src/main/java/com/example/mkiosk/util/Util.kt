@@ -1,24 +1,23 @@
 package com.example.mkiosk.util
 
 import android.content.Context
-import android.os.Environment
 import android.widget.Toast
 import com.example.mkiosk.data.Song
-import java.util.UUID
 
 typealias Changer<T> = (T) -> Unit
 
 object Util {
-    val accountMap: MutableMap<String, MutableList<Song>> = hashMapOf()
-    val recommendationMap: MutableMap<UUID, MutableList<String>> = hashMapOf()
+    var accountMap: MutableMap<String, MutableList<Song>> = hashMapOf()
+    val recommendationMap: MutableMap<String, MutableList<String>> = hashMapOf()
     fun Context.toast(resId: Int, vararg args: String) = Toast.makeText(this, getString(resId, *args), Toast.LENGTH_SHORT).show()
+    const val PASSWORD = "1111"
     lateinit var editingSong: Song
 
     val songList
         get() = accountMap.values.flatten().sortedByDescending {
             it.recommendation
         }.toList()
-    fun findOwner(id: UUID) : String? {
+    fun findOwner(id: String) : String? {
         for ((owner, songs) in accountMap.entries) {
             if (songs.count { song -> song.id == id } != 0) {
                 return owner
@@ -26,5 +25,5 @@ object Util {
         }
         return null
     }
-
+    fun voteCount(id: String) : Boolean = recommendationMap.values.count { users -> users.contains(id) } > 3
 }

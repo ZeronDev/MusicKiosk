@@ -22,8 +22,7 @@ object BarcodeScanner {
     val options = BarcodeScannerOptions.Builder().setBarcodeFormats(Barcode.FORMAT_CODE_39).build()
     val scanner = BarcodeScanning.getClient(options)
     fun scan(image: InputImage, context: Context, idChanger: Changer<String>) {
-
-        val result = scanner.process(image).addOnSuccessListener { barcodes ->
+        scanner.process(image).addOnSuccessListener { barcodes ->
             if (barcodes.size != 1) {
                 return@addOnSuccessListener
             }
@@ -35,18 +34,16 @@ object BarcodeScanner {
                 if (barcode.valueType == Barcode.TYPE_TEXT && barcode.displayValue?.isDigitsOnly() == true) {
                     id = barcode.displayValue
                 }
-                Log.d("TEST", barcode.rawValue ?: "ERROR")
                 id?.let {
-                    accountMap[id] = accountMap[id] ?: mutableListOf()
-                    idChanger(id)
-                    context.toast(R.string.success)
-
-                    val toneGen = ToneGenerator(AudioManager.STREAM_MUSIC, 1000)
-                    toneGen.startTone(ToneGenerator.TONE_DTMF_S, 500) // 500ms "삐" 소리
-
+                    if (id.length == 9) {
+                        accountMap[id] = accountMap[id] ?: mutableListOf()
+                        idChanger(id)
+                        context.toast(R.string.success)
+                    }
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
+                context.toast(R.string.error)
             }
         }
     }

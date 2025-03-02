@@ -32,4 +32,8 @@
     <string name="admin_logout">관리자 로그아웃</string>
     <string name="admin_must_logout">인증 해제를 한 후 관리자 모드에 로그인 할 수 있습니다</string>
     <string name="admin_login">인증</string>
+    <string name="maximum_recommendation">하루에 3번을 초과하여 추천할 수 없습니다</string>
+    <string name="recommendation">추천</string>
+    <string name="ID">ID</string>
+    <string name="owner_permission">기기 소유자 권한 필요</string>
 </resources>

@@ -1,7 +1,6 @@
 package com.example.mkiosk.widget
 
 import android.util.Log
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,10 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -21,20 +17,17 @@ import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.mkiosk.R
@@ -42,6 +35,7 @@ import com.example.mkiosk.data.Song
 import com.example.mkiosk.ui.theme.Typography
 import com.example.mkiosk.ui.theme.mainColorScheme
 import com.example.mkiosk.util.Changer
+import com.example.mkiosk.util.Util.PASSWORD
 import com.example.mkiosk.util.Util.accountMap
 import com.example.mkiosk.util.Util.recommendationMap
 import com.example.mkiosk.util.Util.songList
@@ -68,7 +62,7 @@ object InputWindow {
                             .fillMaxWidth()
                             .padding(horizontal = 10.dp, vertical = 0.dp)
                             , textStyle = Typography.bodySmall, label = { Text("아티스트", color = mainColorScheme.primary, style = Typography.bodySmall ) }, singleLine = true,
-                            placeholder = { Text("(필수X)", color = mainColorScheme.tertiary, style = Typography.bodySmall) }, colors = OutlinedTextFieldDefaults.colors(unfocusedBorderColor = mainColorScheme.primary, focusedBorderColor = mainColorScheme.primary, unfocusedContainerColor = mainColorScheme.onPrimary, focusedContainerColor = mainColorScheme.onPrimary))
+                            placeholder = { Text(stringResource(R.string.no_essential), color = mainColorScheme.tertiary, style = Typography.bodySmall) }, colors = OutlinedTextFieldDefaults.colors(unfocusedBorderColor = mainColorScheme.primary, focusedBorderColor = mainColorScheme.primary, unfocusedContainerColor = mainColorScheme.onPrimary, focusedContainerColor = mainColorScheme.onPrimary))
                         Spacer(modifier = Modifier
                             .fillMaxWidth()
                             .height(5.dp))
@@ -76,7 +70,7 @@ object InputWindow {
                             .fillMaxWidth()
                             .padding(horizontal = 10.dp, vertical = 0.dp)
                             , textStyle = Typography.bodySmall, label = { Text("노래", color = mainColorScheme.primary, style = Typography.bodySmall ) }, singleLine = true,
-                            placeholder = { Text("(필수)", color = mainColorScheme.tertiary, style = Typography.bodySmall) }, colors = OutlinedTextFieldDefaults.colors(unfocusedBorderColor = mainColorScheme.primary, focusedBorderColor = mainColorScheme.primary, unfocusedContainerColor = mainColorScheme.onPrimary, focusedContainerColor = mainColorScheme.onPrimary))
+                            placeholder = { Text(stringResource(R.string.essential), color = mainColorScheme.tertiary, style = Typography.bodySmall) }, colors = OutlinedTextFieldDefaults.colors(unfocusedBorderColor = mainColorScheme.primary, focusedBorderColor = mainColorScheme.primary, unfocusedContainerColor = mainColorScheme.onPrimary, focusedContainerColor = mainColorScheme.onPrimary))
                     }
                     Spacer(modifier = Modifier
                         .fillMaxWidth()
@@ -94,7 +88,7 @@ object InputWindow {
                                 context.toast(R.string.title_empty)
                             } else {
                                 if (accountMap.values.flatten().all {it.title != title || it.artist != artist}) {
-                                    val uuid = UUID.randomUUID()
+                                    val uuid = UUID.randomUUID().toString()
                                     val song = Song(artist, title, 0, uuid)
                                     accountMap[id] = accountMap[id]!!.apply {
                                         add(song)
@@ -138,7 +132,7 @@ object InputWindow {
                             .fillMaxWidth()
                             .padding(horizontal = 10.dp, vertical = 0.dp)
                             , textStyle = Typography.bodySmall, label = { Text(stringResource(R.string.artist), color = mainColorScheme.primary, style = Typography.bodySmall ) }, singleLine = true,
-                            placeholder = { Text(stringResource(R.string.essential), color = mainColorScheme.tertiary, style = Typography.bodySmall) }, colors = OutlinedTextFieldDefaults.colors(unfocusedBorderColor = mainColorScheme.primary, focusedBorderColor = mainColorScheme.primary, unfocusedContainerColor = mainColorScheme.onPrimary, focusedContainerColor = mainColorScheme.onPrimary))
+                            placeholder = { Text(stringResource(R.string.no_essential), color = mainColorScheme.tertiary, style = Typography.bodySmall) }, colors = OutlinedTextFieldDefaults.colors(unfocusedBorderColor = mainColorScheme.primary, focusedBorderColor = mainColorScheme.primary, unfocusedContainerColor = mainColorScheme.onPrimary, focusedContainerColor = mainColorScheme.onPrimary))
                         Spacer(modifier = Modifier
                             .fillMaxWidth()
                             .height(5.dp))
@@ -146,7 +140,7 @@ object InputWindow {
                             .fillMaxWidth()
                             .padding(horizontal = 10.dp, vertical = 0.dp)
                             , textStyle = Typography.bodySmall, label = { Text(stringResource(R.string.song), color = mainColorScheme.primary, style = Typography.bodySmall ) }, singleLine = true,
-                            placeholder = { Text(stringResource(R.string.no_essential), color = mainColorScheme.tertiary, style = Typography.bodySmall) }, colors = OutlinedTextFieldDefaults.colors(unfocusedBorderColor = mainColorScheme.primary, focusedBorderColor = mainColorScheme.primary, unfocusedContainerColor = mainColorScheme.onPrimary, focusedContainerColor = mainColorScheme.onPrimary))
+                            placeholder = { Text(stringResource(R.string.essential), color = mainColorScheme.tertiary, style = Typography.bodySmall) }, colors = OutlinedTextFieldDefaults.colors(unfocusedBorderColor = mainColorScheme.primary, focusedBorderColor = mainColorScheme.primary, unfocusedContainerColor = mainColorScheme.onPrimary, focusedContainerColor = mainColorScheme.onPrimary))
                     }
                     Spacer(modifier = Modifier
                         .fillMaxWidth()
@@ -219,7 +213,7 @@ object InputWindow {
                             Text(stringResource(R.string.dismiss), style = Typography.bodyMedium)
                         }
                         ElevatedButton(onClick = {
-                            if (password == "0304") {
+                            if (password == PASSWORD) {
                                 context.toast(R.string.admin_logined)
                                 adminChanger(true)
                             } else {

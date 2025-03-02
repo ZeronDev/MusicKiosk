@@ -1,7 +1,5 @@
 package com.example.mkiosk.widget
 
-import android.util.Log
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,9 +17,8 @@ import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.ThumbUp
-import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.ThumbUp
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -36,9 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.mkiosk.R
 import com.example.mkiosk.data.Song
@@ -51,8 +46,8 @@ import com.example.mkiosk.util.Util.findOwner
 import com.example.mkiosk.util.Util.recommendationMap
 import com.example.mkiosk.util.Util.songList
 import com.example.mkiosk.util.Util.toast
+import com.example.mkiosk.util.Util.voteCount
 
-//@Preview(showBackground = true, backgroundColor = 0xFFFFFF)
 @Composable
 fun SongCard(index: Int, id: String, song: Song, songChanger: Changer<List<Song>>, editChanger: Changer<Boolean>, modifier: Modifier) {
     val isOwned = accountMap[id]?.contains(song) ?: false
@@ -106,6 +101,9 @@ fun SongCard(index: Int, id: String, song: Song, songChanger: Changer<List<Song>
                         context.toast(R.string.need_login)
                         return@IconButton
                     }
+                    if (voteCount(id)) {
+                        context.toast(R.string.maximum_recommendation)
+                    }
 
                     var increase = 1
                     if (recommendationMap[song.id]?.contains(id) == true) {
@@ -119,12 +117,9 @@ fun SongCard(index: Int, id: String, song: Song, songChanger: Changer<List<Song>
                         it.recommendation += increase
                     }
                     songChanger(songList)
-                    Log.d("TEST", "$isRecommended")
-                    Log.d("TEST", "R: $recommendationMap")
-                    Log.d("TEST", "A: $accountMap")
 
                 }) {
-                    Icon(Icons.Filled.ThumbUp, stringResource(R.string.delete),
+                    Icon(if (isRecommended) Icons.Filled.ThumbUp else Icons.Outlined.ThumbUp, stringResource(R.string.recommendation),
                         tint = recommendColor,
                         modifier = Modifier.size(60.dp))
                 }
@@ -152,14 +147,20 @@ fun AdminCard(index: Int, song: Song, songChanger: Changer<List<Song>>, modifier
                 Text(song.artist + (if (song.artist.isNotEmpty()) " - " else "") + song.title, style = Typography.bodySmall, color = Color.Black)
             }
 
-            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxHeight()) {
+            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxHeight() ) {
                 Icon(
                     Icons.Filled.AccountBox,
-                    stringResource(R.string.delete),
+                    stringResource(R.string.ID),
                     tint = mainColorScheme.primary,
                     modifier = Modifier.size(60.dp)
                 )
-                Text("ID : ${findOwner(song.id)}", style = Typography.bodySmall)
+                Text("ID : ${findOwner(song.id)}", style = Typography.bodySmall, color = Color.Black)
+            }
+
+
+            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxHeight()) {
+
+
                 IconButton(onClick = {
                     accountMap[findOwner(song.id)]?.remove(song)
                     recommendationMap.remove(song.id)
@@ -173,12 +174,15 @@ fun AdminCard(index: Int, song: Song, songChanger: Changer<List<Song>>, modifier
                         modifier = Modifier.size(60.dp)
                     )
                 }
-                Icon(
-                    Icons.Filled.ThumbUp,
-                    stringResource(R.string.delete),
-                    tint = Color.Black,
-                    modifier = Modifier.size(60.dp)
-                )
+                IconButton(onClick = {}) {
+                    Icon(
+                        Icons.Outlined.ThumbUp,
+                        stringResource(R.string.recommendation),
+                        tint = Color.Black,
+                        modifier = Modifier.size(60.dp)
+                    )
+                }
+
                 Text(
                     song.recommendation.toString(),
                     modifier = Modifier.padding(horizontal = 5.dp),

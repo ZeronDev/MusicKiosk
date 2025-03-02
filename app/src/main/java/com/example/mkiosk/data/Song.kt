@@ -1,5 +1,6 @@
 package com.example.mkiosk.data
 
-import java.util.UUID
+import kotlinx.serialization.Serializable
 
-data class Song(var artist: String, var title: String, var recommendation: Int, val id: UUID)
+@Serializable
+data class Song(var artist: String, var title: String, var recommendation: Int, val id: String)

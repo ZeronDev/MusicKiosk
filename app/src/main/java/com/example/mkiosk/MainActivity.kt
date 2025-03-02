@@ -1,7 +1,10 @@
 package com.example.mkiosk
 
-import android.annotation.SuppressLint
+import android.app.admin.DevicePolicyManager
+import android.content.ComponentName
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -15,23 +18,19 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.mkiosk.data.DataStorage.readSongs
 import com.example.mkiosk.ui.theme.MkioskTheme
 import com.example.mkiosk.ui.theme.mainColorScheme
+import com.example.mkiosk.util.KioskReceiver
+import com.example.mkiosk.util.Util.accountMap
 import com.example.mkiosk.util.Util.editingSong
 import com.example.mkiosk.util.Util.songList
 import com.example.mkiosk.widget.AdminCard
@@ -41,21 +40,29 @@ import com.example.mkiosk.widget.InputWindow.EditDialog
 import com.example.mkiosk.widget.InputWindow.SongDialog
 import com.example.mkiosk.widget.SongCard
 import com.example.mkiosk.widget.VerifySection
+import kotlinx.coroutines.runBlocking
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 var cameraExecutor: ExecutorService = Executors.newSingleThreadExecutor()
 
 class MainActivity : ComponentActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge() // 앱의 화면에 status bar(상태표시줄)과 navigation bar (네비게이션바) 까지 포함한다. 상태표시줄과 네비게이션바는 앱의 내용을 가리지 않기 위해 투명해짐
+        enableEdgeToEdge()
         setContent {
             MkioskTheme {
                 App()
             }
+
         }
+        val dpm = getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
+        val adminName = ComponentName(this, KioskReceiver::class.java)
+        dpm.setLockTaskPackages(adminName, arrayOf(packageName))
+
+        startLockTask()
+
+        runBlocking { readSongs(this@MainActivity) }
         cameraExecutor = Executors.newSingleThreadExecutor()
     }
 
@@ -77,7 +84,7 @@ class MainActivity : ComponentActivity() {
 
         Surface(modifier = Modifier.fillMaxSize().background(mainColorScheme.onPrimary)) {
             Scaffold(modifier = Modifier.fillMaxSize(),
-                topBar = { CustomAppBar(id.isNotEmpty(), admin, adminLogin, adminChanger) }
+                topBar = { CustomAppBar(id.isNotEmpty(), admin, adminLogin, adminChanger, this) }
             ) { innerPadding -> // topBar와 bottomBar를 가리지 않음
 
                 if (applyDialog) SongDialog(id, applyChanger, songChanger)

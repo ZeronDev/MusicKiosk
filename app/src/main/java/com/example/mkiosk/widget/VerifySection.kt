@@ -1,7 +1,5 @@
 package com.example.mkiosk.widget
 
-import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,12 +20,10 @@ import com.example.mkiosk.widget.CameraUtil.CameraView
 fun VerifySection(id: String, idChanger: Changer<String>, applyChanger: Changer<Boolean>, isAdmin: Boolean) {
 
     val buttons = Buttons(idChanger)
-//    val camera = CameraUtil(context)
     var (isGranted, grantedChanger) = rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
 
     LaunchedEffect(Unit) { grantedChanger(isGranted(context)) }
-//    Log.d("ID", id)
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         CameraView(idChanger, id.isNotEmpty(), isAdmin)
 
