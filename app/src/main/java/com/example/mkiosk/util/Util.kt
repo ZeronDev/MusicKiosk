@@ -10,7 +10,6 @@ object Util {
     var accountMap: MutableMap<String, MutableList<Song>> = hashMapOf()
     val recommendationMap: MutableMap<String, MutableList<String>> = hashMapOf()
     fun Context.toast(resId: Int, vararg args: String) = Toast.makeText(this, getString(resId, *args), Toast.LENGTH_SHORT).show()
-    const val PASSWORD = "1111"
     lateinit var editingSong: Song
 
     val songList

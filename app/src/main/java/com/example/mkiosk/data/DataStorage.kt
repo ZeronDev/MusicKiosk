@@ -21,6 +21,8 @@ object DataStorage {
     val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "MusicKiosk")
     val granted = booleanPreferencesKey("granted")
     val songs = stringPreferencesKey("song_list")
+    val pwKey = stringPreferencesKey("password")
+    lateinit var PASSWORD: String
 
     suspend fun grant(context: Context) {
         try {
@@ -31,7 +33,6 @@ object DataStorage {
             e.printStackTrace()
             context.toast(R.string.error)
         }
-
     }
 
     suspend fun isGranted(context: Context) : Boolean {
@@ -67,7 +68,24 @@ object DataStorage {
             e.printStackTrace()
             context.toast(R.string.error)
         }
-
+    }
+    suspend fun changePW(context: Context, pw: String) {
+        try {
+            context.dataStore.edit { data ->
+                data[pwKey] = pw
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            context.toast(R.string.error)
+        }
+    }
+    suspend fun readPW(context: Context) {
+        try {
+            PASSWORD = context.dataStore.data.map { it[pwKey] }.first() ?: "1111"
+        } catch (e: Exception) {
+            e.printStackTrace()
+            context.toast(R.string.error)
+        }
     }
 
 }

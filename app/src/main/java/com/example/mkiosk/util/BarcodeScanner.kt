@@ -1,22 +1,14 @@
 package com.example.mkiosk.util
 
 import android.content.Context
-import android.media.AudioManager
-import android.media.ToneGenerator
-import android.util.Log
 import androidx.core.text.isDigitsOnly
 import com.example.mkiosk.R
 import com.example.mkiosk.util.Util.accountMap
-import com.example.mkiosk.util.Util.recommendationMap
 import com.example.mkiosk.util.Util.toast
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-
 
 object BarcodeScanner {
     val options = BarcodeScannerOptions.Builder().setBarcodeFormats(Barcode.FORMAT_CODE_39).build()

@@ -8,6 +8,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 
 
 val mainColorScheme = lightColorScheme(
@@ -27,6 +28,7 @@ fun MkioskTheme(
             val window = (view.context as Activity).window
             window.statusBarColor = mainColorScheme.secondary.toArgb()
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = false
+            WindowCompat.getInsetsController(window, view).hide(WindowInsetsCompat.Type.systemBars())
         }
     }
 

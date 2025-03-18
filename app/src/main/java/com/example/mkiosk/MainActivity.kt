@@ -3,8 +3,8 @@ package com.example.mkiosk
 import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -26,17 +26,18 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.mkiosk.data.DataStorage.readPW
 import com.example.mkiosk.data.DataStorage.readSongs
 import com.example.mkiosk.ui.theme.MkioskTheme
 import com.example.mkiosk.ui.theme.mainColorScheme
 import com.example.mkiosk.util.KioskReceiver
-import com.example.mkiosk.util.Util.accountMap
 import com.example.mkiosk.util.Util.editingSong
 import com.example.mkiosk.util.Util.songList
 import com.example.mkiosk.widget.AdminCard
 import com.example.mkiosk.widget.AppBar.CustomAppBar
 import com.example.mkiosk.widget.InputWindow.AdminLogin
 import com.example.mkiosk.widget.InputWindow.EditDialog
+import com.example.mkiosk.widget.InputWindow.PasswordDialog
 import com.example.mkiosk.widget.InputWindow.SongDialog
 import com.example.mkiosk.widget.SongCard
 import com.example.mkiosk.widget.VerifySection
@@ -54,15 +55,21 @@ class MainActivity : ComponentActivity() {
             MkioskTheme {
                 App()
             }
-
         }
+
         val dpm = getSystemService(Context.DEVICE_POLICY_SERVICE) as DevicePolicyManager
         val adminName = ComponentName(this, KioskReceiver::class.java)
         dpm.setLockTaskPackages(adminName, arrayOf(packageName))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) { // Android 9 (Pie) 이상
+            dpm.setLockTaskFeatures(adminName, DevicePolicyManager.LOCK_TASK_FEATURE_NONE)
+        }
 
         startLockTask()
 
-        runBlocking { readSongs(this@MainActivity) }
+        runBlocking {
+            readSongs(this@MainActivity)
+            readPW(this@MainActivity)
+        }
         cameraExecutor = Executors.newSingleThreadExecutor()
     }
 
@@ -81,15 +88,17 @@ class MainActivity : ComponentActivity() {
         var (editDialog, editChanger) = remember { mutableStateOf(false) }
         var (admin, adminLogin) = rememberSaveable { mutableStateOf(false)}
         var (adminDialog, adminChanger) = remember { mutableStateOf(false)}
+        var (passwordDialog, passwordChanger) = remember { mutableStateOf(false)}
 
         Surface(modifier = Modifier.fillMaxSize().background(mainColorScheme.onPrimary)) {
             Scaffold(modifier = Modifier.fillMaxSize(),
-                topBar = { CustomAppBar(id.isNotEmpty(), admin, adminLogin, adminChanger, this) }
+                topBar = { CustomAppBar(id.isNotEmpty(), this, admin, adminLogin, adminChanger, passwordChanger) }
             ) { innerPadding -> // topBar와 bottomBar를 가리지 않음
 
                 if (applyDialog) SongDialog(id, applyChanger, songChanger)
                 if (editDialog) EditDialog(id, editChanger, editingSong, songChanger)
                 if (adminDialog) AdminLogin(adminLogin, adminChanger)
+                if (passwordDialog) PasswordDialog(passwordChanger)
 
                 Row(modifier = Modifier.padding(innerPadding)) {
                     VerifySection(id, idChanger, applyChanger, admin)

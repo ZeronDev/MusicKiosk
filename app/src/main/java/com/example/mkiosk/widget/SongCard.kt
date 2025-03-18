@@ -147,7 +147,7 @@ fun AdminCard(index: Int, song: Song, songChanger: Changer<List<Song>>, modifier
                 Text(song.artist + (if (song.artist.isNotEmpty()) " - " else "") + song.title, style = Typography.bodySmall, color = Color.Black)
             }
 
-            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxHeight() ) {
+            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxHeight()) {
                 Icon(
                     Icons.Filled.AccountBox,
                     stringResource(R.string.ID),
@@ -155,11 +155,6 @@ fun AdminCard(index: Int, song: Song, songChanger: Changer<List<Song>>, modifier
                     modifier = Modifier.size(60.dp)
                 )
                 Text("ID : ${findOwner(song.id)}", style = Typography.bodySmall, color = Color.Black)
-            }
-
-
-            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxHeight()) {
-
 
                 IconButton(onClick = {
                     accountMap[findOwner(song.id)]?.remove(song)

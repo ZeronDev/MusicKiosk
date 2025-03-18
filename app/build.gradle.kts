@@ -69,4 +69,5 @@ dependencies {
     implementation(libs.barcode.scanning)
     implementation(libs.androidx.datastore.preferences)
 
+
 }
