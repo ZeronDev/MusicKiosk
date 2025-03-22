@@ -1,6 +1,7 @@
 package com.example.mkiosk.widget
 
 import android.Manifest
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ButtonDefaults
@@ -18,6 +19,7 @@ import com.example.mkiosk.ui.theme.Typography
 import com.example.mkiosk.ui.theme.mainColorScheme
 import com.example.mkiosk.util.Changer
 import com.example.mkiosk.util.PermissionListen
+import com.example.mkiosk.util.Util.accountCounter
 import com.example.mkiosk.util.Util.accountMap
 import com.example.mkiosk.util.Util.toast
 import com.gun0912.tedpermission.normal.TedPermission
@@ -59,7 +61,9 @@ class Buttons(val idChanger: Changer<String>) {
     fun ApplyBtn(id: String, applyChanger: Changer<Boolean>) {
         val context = LocalContext.current
         ElevatedButton (onClick = {
-            if ((accountMap[id]!!.size) < 2) {
+            Log.d("Test", "Why")
+            Log.d("TEST",accountCounter.toString())
+            if ((accountCounter[id] ?: 0) < 2) {
                 applyChanger(true)
             } else {
                 context.toast(R.string.login_maximum)

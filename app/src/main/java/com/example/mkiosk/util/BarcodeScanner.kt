@@ -1,6 +1,7 @@
 package com.example.mkiosk.util
 
 import android.content.Context
+import android.util.Log
 import androidx.core.text.isDigitsOnly
 import com.example.mkiosk.R
 import com.example.mkiosk.util.Util.accountMap
@@ -26,6 +27,7 @@ object BarcodeScanner {
                 if (barcode.valueType == Barcode.TYPE_TEXT && barcode.displayValue?.isDigitsOnly() == true) {
                     id = barcode.displayValue
                 }
+
                 id?.let {
                     if (id.length == 9) {
                         accountMap[id] = accountMap[id] ?: mutableListOf()

@@ -11,6 +11,7 @@ object Util {
     val recommendationMap: MutableMap<String, MutableList<String>> = hashMapOf()
     fun Context.toast(resId: Int, vararg args: String) = Toast.makeText(this, getString(resId, *args), Toast.LENGTH_SHORT).show()
     lateinit var editingSong: Song
+    var accountCounter: MutableMap<String, Int> = mutableMapOf()
 
     val songList
         get() = accountMap.values.flatten().sortedByDescending {

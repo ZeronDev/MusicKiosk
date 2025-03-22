@@ -40,6 +40,7 @@ import com.example.mkiosk.data.Song
 import com.example.mkiosk.ui.theme.Typography
 import com.example.mkiosk.ui.theme.mainColorScheme
 import com.example.mkiosk.util.Changer
+import com.example.mkiosk.util.Util.accountCounter
 import com.example.mkiosk.util.Util.accountMap
 import com.example.mkiosk.util.Util.editingSong
 import com.example.mkiosk.util.Util.findOwner
@@ -89,6 +90,7 @@ fun SongCard(index: Int, id: String, song: Song, songChanger: Changer<List<Song>
                     IconButton(onClick = {
                         accountMap[id]?.remove(song)
                         recommendationMap.remove(song.id)
+                        accountCounter[id] = accountCounter[id]!! - 1
                         context.toast(R.string.deleted)
                         songChanger(songList)
                     }) {
@@ -154,11 +156,12 @@ fun AdminCard(index: Int, song: Song, songChanger: Changer<List<Song>>, modifier
                     tint = mainColorScheme.primary,
                     modifier = Modifier.size(60.dp)
                 )
-                Text("ID : ${findOwner(song.id)}", style = Typography.bodySmall, color = Color.Black)
+                val owner = findOwner(song.id)!!
 
                 IconButton(onClick = {
-                    accountMap[findOwner(song.id)]?.remove(song)
+                    accountMap[owner]?.remove(song)
                     recommendationMap.remove(song.id)
+                    accountCounter[owner] =  accountCounter[owner]!! - 1
                     context.toast(R.string.deleted)
                     songChanger(songList)
                 }) {

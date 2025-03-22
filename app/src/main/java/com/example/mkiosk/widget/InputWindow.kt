@@ -41,6 +41,7 @@ import com.example.mkiosk.ui.theme.Typography
 import com.example.mkiosk.ui.theme.mainColorScheme
 import com.example.mkiosk.util.Changer
 import com.example.mkiosk.data.DataStorage.PASSWORD
+import com.example.mkiosk.util.Util.accountCounter
 import com.example.mkiosk.util.Util.accountMap
 import com.example.mkiosk.util.Util.recommendationMap
 import com.example.mkiosk.util.Util.songList
@@ -100,6 +101,7 @@ object InputWindow {
                                     }
                                     recommendationMap[uuid] = mutableListOf()
                                     songChanger(songList)
+                                    accountCounter[id] = (accountCounter[id] ?: 0) + 1
 
                                     context.toast(R.string.confirmed, accountMap[id]!!.size.toString())
                                     dialogChanger(false)

@@ -39,6 +39,7 @@ object DataStorage {
         try {
             return context.dataStore.data.map { it[granted] }.first() ?: false
         } catch (e: Exception) {
+            Log.d("ERROR", "GRANT")
             e.printStackTrace()
             return false
         }
@@ -65,6 +66,7 @@ object DataStorage {
                 recommendationMap[song.id] = mutableListOf()
             }
         } catch (e: Exception) {
+            Log.d("ERROR", "STORE")
             e.printStackTrace()
             context.toast(R.string.error)
         }
@@ -84,8 +86,8 @@ object DataStorage {
             PASSWORD = context.dataStore.data.map { it[pwKey] }.first() ?: "1111"
         } catch (e: Exception) {
             e.printStackTrace()
+            Log.d("ERROR", "PW")
             context.toast(R.string.error)
         }
     }
-
 }
