@@ -47,7 +47,6 @@ object DataStorage {
 
     suspend fun storeSongs(context: Context) {
         try {
-            Log.d("TEST", "STORE: ${Json.encodeToString(accountMap.toMap())}")
             context.dataStore.edit { data ->
                 data[songs] = Json.encodeToString(accountMap.toMap())
             }
@@ -60,13 +59,15 @@ object DataStorage {
 
     suspend fun readSongs(context: Context) {
         try {
-            val songData = Json.decodeFromString<MutableMap<String, MutableList<Song>>>(context.dataStore.data.map { it[songs] }.first().toString())
-            accountMap = songData
-            for (song in songList) {
-                recommendationMap[song.id] = mutableListOf()
+            context.dataStore.data.map { it[songs] }.first()?.toString()?.let {
+                val songData = Json.decodeFromString<MutableMap<String, MutableList<Song>>>(it)
+                accountMap = songData
+                for (song in songList) {
+                    recommendationMap[song.id] = mutableListOf()
+                }
             }
         } catch (e: Exception) {
-            Log.d("ERROR", "STORE")
+            Log.e("ERROR", "STORE")
             e.printStackTrace()
             context.toast(R.string.error)
         }
@@ -86,7 +87,7 @@ object DataStorage {
             PASSWORD = context.dataStore.data.map { it[pwKey] }.first() ?: "1111"
         } catch (e: Exception) {
             e.printStackTrace()
-            Log.d("ERROR", "PW")
+            Log.e("ERROR", "PW")
             context.toast(R.string.error)
         }
     }

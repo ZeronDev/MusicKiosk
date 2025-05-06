@@ -157,6 +157,7 @@ fun AdminCard(index: Int, song: Song, songChanger: Changer<List<Song>>, modifier
                     modifier = Modifier.size(60.dp)
                 )
                 val owner = findOwner(song.id)!!
+                Text("ID : $owner", style = Typography.bodySmall, color = Color.Black)
 
                 IconButton(onClick = {
                     accountMap[owner]?.remove(song)
