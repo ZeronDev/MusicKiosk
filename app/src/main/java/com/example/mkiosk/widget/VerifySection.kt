@@ -1,6 +1,7 @@
 package com.example.mkiosk.widget
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -30,8 +31,7 @@ fun VerifySection(id: String, idChanger: Changer<String>, applyChanger: Changer<
         if (isGranted) {
             if (id.isNotEmpty()) {
                 Spacer(modifier = Modifier.fillMaxWidth(0.25f).height(25.dp))
-                buttons.ApplyBtn(id, applyChanger)
-                buttons.LogOutBtn()
+                buttons.ButtonList(id, applyChanger)
             }
         } else {
             buttons.PermissionBtn(grantedChanger)

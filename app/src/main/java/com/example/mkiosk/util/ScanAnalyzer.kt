@@ -21,9 +21,7 @@ class ScanAnalyzer(var stop: Boolean, val context: Context, val idChanger: Chang
         imageProxy.image?.let {
             isProcessing = true
             val image = InputImage.fromMediaImage(imageProxy.image!!, imageProxy.imageInfo.rotationDegrees)
-            scan(image, context, idChanger, {_ -> isProcessing = false})
+            scan(image, context, idChanger, {_ -> isProcessing = false; imageProxy.close()})
         }
-
-        imageProxy.close()
     }
 }

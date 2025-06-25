@@ -10,14 +10,19 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -29,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import com.example.mkiosk.data.DataStorage.readPW
 import com.example.mkiosk.data.DataStorage.readSongs
 import com.example.mkiosk.ui.theme.MkioskTheme
+import com.example.mkiosk.ui.theme.Typography
 import com.example.mkiosk.ui.theme.mainColorScheme
 import com.example.mkiosk.util.KioskReceiver
 import com.example.mkiosk.util.Util.editingSong
@@ -86,41 +92,58 @@ class MainActivity : ComponentActivity() {
         var (applyDialog, applyChanger) = remember { mutableStateOf(false) }
         var (songs, songChanger) = remember { mutableStateOf(songList) }
         var (editDialog, editChanger) = remember { mutableStateOf(false) }
-        var (admin, adminLogin) = rememberSaveable { mutableStateOf(false)}
-        var (adminDialog, adminChanger) = remember { mutableStateOf(false)}
-        var (passwordDialog, passwordChanger) = remember { mutableStateOf(false)}
+        var (admin, adminLogin) = rememberSaveable { mutableStateOf(false) }
+        var (adminDialog, adminChanger) = remember { mutableStateOf(false) }
+        var (passwordDialog, passwordChanger) = remember { mutableStateOf(false) }
 
-        Surface(modifier = Modifier.fillMaxSize().background(mainColorScheme.onPrimary)) {
-            Scaffold(modifier = Modifier.fillMaxSize(),
-                topBar = { CustomAppBar(id.isNotEmpty(), this, admin, adminLogin, adminChanger, passwordChanger) }
-            ) { innerPadding -> // topBar와 bottomBar를 가리지 않음
 
-                if (applyDialog) SongDialog(id, applyChanger, songChanger)
-                if (editDialog) EditDialog(id, editChanger, editingSong, songChanger)
-                if (adminDialog) AdminLogin(adminLogin, adminChanger)
-                if (passwordDialog) PasswordDialog(passwordChanger)
+        Scaffold(modifier = Modifier.fillMaxSize(),
+            topBar = {
+                CustomAppBar(
+                    id.isNotEmpty(),
+                    this,
+                    admin,
+                    adminLogin,
+                    adminChanger,
+                    passwordChanger
+                )
+            }
+        ) { innerPadding -> // topBar와 bottomBar를 가리지 않음
 
-                Row(modifier = Modifier.padding(innerPadding)) {
-                    VerifySection(id, idChanger, applyChanger, admin)
+            if (applyDialog) SongDialog(id, applyChanger, songChanger)
+            if (editDialog) EditDialog(id, editChanger, editingSong, songChanger)
+            if (adminDialog) AdminLogin(adminLogin, adminChanger)
+            if (passwordDialog) PasswordDialog(passwordChanger)
 
-                    VerticalDivider(
-                        modifier = Modifier.fillMaxHeight(),
-                        thickness = 5.dp,
-                        color = mainColorScheme.tertiary
-                    )
+            Column(modifier = Modifier.padding(innerPadding)) {
+                VerifySection(id, idChanger, applyChanger, admin)
 
-                    LazyColumn(modifier=Modifier.fillMaxSize()) {
-                        itemsIndexed(items = songs, key = { _, song -> song.id}) { index, song ->
-                            if (admin) {
-                                AdminCard(index+1, song, songChanger, Modifier.animateItemPlacement())
-                            } else {
-                                SongCard(index+1, id, song, songChanger, editChanger, Modifier.animateItemPlacement())
-                            }
+//                    VerticalDivider(
+//                        modifier = Modifier.fillMaxHeight(),
+//                        thickness = 5.dp,
+//                        color = mainColorScheme.tertiary
+//                    )
+                Spacer(Modifier.fillMaxWidth().height(30.dp))
+                Text("신청곡", style = Typography.titleLarge, color = mainColorScheme.primary, modifier = Modifier.padding(20.dp))
+                LazyColumn(modifier = Modifier.fillMaxSize()) {
+                    itemsIndexed(items = songs, key = { _, song -> song.id }) { index, song ->
+                        if (admin) {
+                            AdminCard(index + 1, song, songChanger, Modifier.animateItemPlacement())
+                        } else {
+                            SongCard(
+                                index + 1,
+                                id,
+                                song,
+                                songChanger,
+                                editChanger,
+                                Modifier.animateItemPlacement()
+                            )
                         }
                     }
                 }
             }
         }
+
     }
 }
 

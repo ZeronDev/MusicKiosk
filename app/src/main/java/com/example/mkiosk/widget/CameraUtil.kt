@@ -51,6 +51,6 @@ object CameraUtil {
                 context.toast(R.string.error)
             }
         }
-        AndroidView(factory = { previewView }, modifier = Modifier.fillMaxHeight(0.75f).fillMaxWidth(0.25f).padding(15.dp).clip(RoundedCornerShape(20.dp)))
+        AndroidView(factory = { previewView }, modifier = Modifier.fillMaxHeight(0.35f).fillMaxWidth().padding(15.dp).clip(RoundedCornerShape(20.dp)))
     }
 }

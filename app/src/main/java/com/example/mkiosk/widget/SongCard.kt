@@ -1,5 +1,7 @@
 package com.example.mkiosk.widget
 
+import android.content.Context
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,6 +20,8 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material.icons.outlined.ThumbUp
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -32,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -60,7 +65,8 @@ fun SongCard(index: Int, id: String, song: Song, songChanger: Changer<List<Song>
     Card(modifier = modifier
         .fillMaxWidth()
         .height(80.dp)
-        .padding(6.dp), shape = RoundedCornerShape(70.dp), colors = CardDefaults.cardColors(containerColor = mainColorScheme.tertiary)) {
+        .padding(horizontal = 30.dp, vertical = 6.dp), shape = RoundedCornerShape(15.dp), colors = CardDefaults.cardColors(containerColor = Color.White), border = BorderStroke(1.dp, Color.LightGray)
+    ) {
         Row(modifier = Modifier
             .fillMaxSize()
             .padding(10.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
@@ -136,7 +142,7 @@ fun AdminCard(index: Int, song: Song, songChanger: Changer<List<Song>>, modifier
     Card(modifier = modifier
         .fillMaxWidth()
         .height(80.dp)
-        .padding(6.dp), shape = RoundedCornerShape(70.dp), colors = CardDefaults.cardColors(containerColor = mainColorScheme.tertiary)) {
+        .padding(horizontal = 30.dp, vertical = 6.dp), shape = RoundedCornerShape(70.dp), colors = CardDefaults.cardColors(containerColor = Color.White), border = BorderStroke(1.dp, Color.LightGray)) {
         Row(modifier = Modifier
             .fillMaxSize()
             .padding(10.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
@@ -157,7 +163,7 @@ fun AdminCard(index: Int, song: Song, songChanger: Changer<List<Song>>, modifier
                     modifier = Modifier.size(60.dp)
                 )
                 val owner = findOwner(song.id)!!
-                Text("ID : $owner", style = Typography.bodySmall, color = Color.Black)
+                Text(owner, style = Typography.bodySmall, color = Color.Black)
 
                 IconButton(onClick = {
                     accountMap[owner]?.remove(song)

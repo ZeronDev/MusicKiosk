@@ -1,5 +1,6 @@
 package com.example.mkiosk.widget
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -7,8 +8,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -23,6 +31,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
@@ -81,14 +90,26 @@ object InputWindow {
                         .fillMaxWidth()
                         .height(10.dp))
                     Row {
-                        ElevatedButton(onClick = {
+                        Button(onClick = {
                             dialogChanger(false)
-                        },  modifier = Modifier
+                        }, modifier = Modifier
                             .fillMaxWidth(0.5f)
-                            .padding(10.dp), shape = RectangleShape, colors = ButtonDefaults.buttonColors(containerColor = mainColorScheme.secondary, contentColor = mainColorScheme.onPrimary)) {
-                            Text(stringResource(R.string.dismiss), style = Typography.bodyMedium)
+                            .padding(10.dp), shape = RoundedCornerShape(15.dp), colors = ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = mainColorScheme.onPrimary), border = BorderStroke(1.dp, Color.LightGray)
+                        ) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(
+                                    Icons.Filled.Close,
+                                    "",
+                                    Modifier.size(30.dp),
+                                    tint = mainColorScheme.secondary
+                                )
+                                Text(
+                                    stringResource(R.string.dismiss),
+                                    style = Typography.bodyMedium, color = Color.Black
+                                )
+                            }
                         }
-                        ElevatedButton(onClick = {
+                        Button(onClick = {
                             if (title.isEmpty()) {
                                 context.toast(R.string.title_empty)
                             } else {
@@ -110,8 +131,11 @@ object InputWindow {
                             }
                         },  modifier = Modifier
                             .fillMaxWidth()
-                            .padding(10.dp), shape = RectangleShape, colors = ButtonDefaults.buttonColors(containerColor = mainColorScheme.primary, contentColor = mainColorScheme.onPrimary)) {
-                            Text(stringResource(R.string.confirm), style = Typography.bodyMedium)
+                            .padding(10.dp), shape = RoundedCornerShape(15.dp), colors = ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = mainColorScheme.onPrimary), border = BorderStroke(1.dp, Color.LightGray)) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(painterResource(R.drawable.add), "", Modifier.size(30.dp), tint = mainColorScheme.primary)
+                                Text(stringResource(R.string.confirm), style = Typography.bodyMedium, color = Color.Black)
+                            }
                         }
                     }
                 }
@@ -151,14 +175,17 @@ object InputWindow {
                         .fillMaxWidth()
                         .height(10.dp))
                     Row {
-                        ElevatedButton(onClick = {
+                        Button(onClick = {
                             dialogChanger(false)
                         },  modifier = Modifier
                             .fillMaxWidth(0.5f)
-                            .padding(10.dp), shape = RectangleShape, colors = ButtonDefaults.buttonColors(containerColor = mainColorScheme.secondary, contentColor = mainColorScheme.onPrimary)) {
-                            Text(stringResource(R.string.dismiss), style = Typography.bodyMedium)
+                            .padding(10.dp), shape = RoundedCornerShape(15.dp), colors = ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = mainColorScheme.onPrimary), border = BorderStroke(1.dp, Color.LightGray)) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(Icons.Filled.Close, "", Modifier.size(30.dp), tint = mainColorScheme.secondary)
+                                Text(stringResource(R.string.dismiss), style = Typography.bodyMedium, color = Color.Black)
+                            }
                         }
-                        ElevatedButton(onClick = {
+                        Button(onClick = {
                             if (title.isEmpty()) {
                                 context.toast(R.string.title_empty)
                             } else {
@@ -178,8 +205,11 @@ object InputWindow {
                             }
                         },  modifier = Modifier
                             .fillMaxWidth()
-                            .padding(10.dp), shape = RectangleShape, colors = ButtonDefaults.buttonColors(containerColor = mainColorScheme.primary, contentColor = mainColorScheme.onPrimary)) {
-                            Text(stringResource(R.string.edit), style = Typography.bodyMedium)
+                            .padding(10.dp), shape = RoundedCornerShape(15.dp), colors = ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = mainColorScheme.onPrimary), border = BorderStroke(1.dp, Color.LightGray)) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Icon(Icons.Filled.Edit, "", Modifier.size(30.dp), tint = mainColorScheme.primary)
+                                Text(stringResource(R.string.edit), style = Typography.bodyMedium, color = Color.Black)
+                            }
                         }
                     }
                 }
@@ -214,14 +244,21 @@ object InputWindow {
                         .fillMaxWidth()
                         .height(10.dp))
                     Row {
-                        ElevatedButton(onClick = {
+                        Button(onClick = {
                             dialogChanger(false)
                         },  modifier = Modifier
                             .fillMaxWidth(0.5f)
-                            .padding(10.dp), shape = RectangleShape, colors = ButtonDefaults.buttonColors(containerColor = mainColorScheme.secondary, contentColor = mainColorScheme.onPrimary)) {
-                            Text(stringResource(R.string.dismiss), style = Typography.bodyMedium)
+                            .padding(10.dp), shape = RoundedCornerShape(15.dp), colors = ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = mainColorScheme.onPrimary), border = BorderStroke(1.dp, Color.LightGray)) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(Icons.Filled.Close, "", Modifier.size(30.dp), tint = mainColorScheme.secondary)
+                                Text(
+                                    stringResource(R.string.dismiss),
+                                    style = Typography.bodyMedium,
+                                    color = Color.Black
+                                )
+                            }
                         }
-                        ElevatedButton(onClick = {
+                        Button(onClick = {
                             if (password == PASSWORD) {
                                 context.toast(R.string.admin_logined)
                                 adminChanger(true)
@@ -231,8 +268,12 @@ object InputWindow {
                             dialogChanger(false)
                         },  modifier = Modifier
                             .fillMaxWidth()
-                            .padding(10.dp), shape = RectangleShape, colors = ButtonDefaults.buttonColors(containerColor = mainColorScheme.primary, contentColor = mainColorScheme.onPrimary)) {
-                            Text(stringResource(R.string.admin_login), style = Typography.bodyMedium)
+                            .padding(10.dp), shape = RoundedCornerShape(15.dp), colors = ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = mainColorScheme.onPrimary), border = BorderStroke(1.dp, Color.LightGray)) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(painterResource(R.drawable.admin), "", Modifier.size(30.dp), tint = mainColorScheme.primary)
+                                Text(stringResource(R.string.admin_login), style = Typography.bodyMedium, color = Color.Black)
+                            }
+
                         }
                     }
                 }
@@ -283,14 +324,17 @@ object InputWindow {
                         .fillMaxWidth()
                         .height(10.dp))
                     Row {
-                        ElevatedButton(onClick = {
+                        Button(onClick = {
                             dialogChanger(false)
                         },  modifier = Modifier
                             .fillMaxWidth(0.5f)
-                            .padding(10.dp), shape = RectangleShape, colors = ButtonDefaults.buttonColors(containerColor = mainColorScheme.secondary, contentColor = mainColorScheme.onPrimary)) {
-                            Text(stringResource(R.string.dismiss), style = Typography.bodyMedium)
+                            .padding(10.dp), shape = RoundedCornerShape(15.dp), colors = ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = mainColorScheme.onPrimary), border = BorderStroke(1.dp, Color.LightGray)) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(Icons.Filled.Close, "", Modifier.size(30.dp), tint = mainColorScheme.secondary)
+                                Text(stringResource(R.string.dismiss), style = Typography.bodyMedium, color = Color.Black)
+                            }
                         }
-                        ElevatedButton(onClick = {
+                        Button(onClick = {
                             if (newPw == confirm) {
                                 PASSWORD = newPw
                                 context.toast(R.string.password_changed)
@@ -298,8 +342,12 @@ object InputWindow {
                             }
                         },  modifier = Modifier
                             .fillMaxWidth()
-                            .padding(10.dp), shape = RectangleShape, colors = ButtonDefaults.buttonColors(containerColor = mainColorScheme.primary, contentColor = mainColorScheme.onPrimary)) {
-                            Text(stringResource(R.string.edit), style = Typography.bodyMedium)
+                            .padding(10.dp), shape = RoundedCornerShape(15.dp), colors = ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = mainColorScheme.onPrimary), border = BorderStroke(1.dp, Color.LightGray)) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(Icons.Filled.Lock, "", Modifier.size(30.dp), tint = mainColorScheme.primary)
+                                Text(stringResource(R.string.edit), style = Typography.bodyMedium, color = Color.Black)
+                            }
+
                         }
                     }
                 }
